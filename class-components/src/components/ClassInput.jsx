@@ -15,6 +15,8 @@ class ClassInput extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.setTodoEditStatus = this.setTodoEditStatus.bind(this);
+    this.updateTodoContent = this.updateTodoContent.bind(this);
   }
 
   handleInputChange(e) {
@@ -42,6 +44,22 @@ class ClassInput extends Component {
     }));
   }
 
+  setTodoEditStatus(index) {
+    this.setState((state) => ({
+      todos: state.todos.map((todo, i) => 
+        i === index ? {...todo, isEditing: !todo.isEditing} : todo
+      ),
+    }))
+  }
+
+  updateTodoContent(index, newContent) {
+    this.setState((state) => ({
+      todos: state.todos.map((todo, i) =>
+        i === index ? {...todo, content: newContent} : todo
+      ),
+    }))
+  }
+
   render() {
     return (
       <section>
@@ -62,7 +80,13 @@ class ClassInput extends Component {
         <ul>
           {this.state.todos.map((todo, index) => (
             <li key={index}>
-              {todo.content}
+              {todo.isEditing ? (
+                <input 
+                  type='text'
+                  value={todo.content}
+                  onChange={(e) => this.updateTodoContent(index, e.target.value)}
+                />
+              ) : todo.content}
               <button 
                 type='button' 
                 className='delete-btn'
@@ -73,8 +97,9 @@ class ClassInput extends Component {
               <button
                 type='button'
                 className='edit-btn'
+                onClick={() => this.setTodoEditStatus(index)}
               >
-                Edit
+                {todo.isEditing ? 'Resubmit' : 'Edit'}
               </button>
             </li>
           ))}
