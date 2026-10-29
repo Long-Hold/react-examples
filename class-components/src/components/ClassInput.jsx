@@ -5,7 +5,10 @@ class ClassInput extends Component {
     super(props);
 
     this.state = {
-      todos: ['Just some demo tasks', 'As an example'],
+      todos: [
+        {content: 'Just some demo tasks', isEditing: false},
+        {content: 'As an example', isEditing: false},
+      ],
       inputVal: '',
     };
 
@@ -24,15 +27,18 @@ class ClassInput extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState((state) => ({
-      todos: state.todos.concat(state.inputVal),
+      todos: state.todos.concat({
+        content: state.inputVal,
+        isEditing: false
+    }),
       inputVal: '',
     }));
   }
 
   // Add a new delete button
-  deleteTodo(todoToDelete) {
+  deleteTodo(indexToDelete) {
     this.setState((state) => ({
-      todos: state.todos.filter(todo => todo !== todoToDelete)
+      todos: state.todos.filter((_, index) => index !== indexToDelete)
     }));
   }
 
@@ -54,14 +60,21 @@ class ClassInput extends Component {
         <h4>All the tasks!</h4>
         {/* The list of all the To-Do's, displayed */}
         <ul>
-          {this.state.todos.map((todo) => (
-            <li key={todo}>
-              {todo}
+          {this.state.todos.map((todo, index) => (
+            <li key={index}>
+              {todo.content}
               <button 
                 type='button' 
                 className='delete-btn'
-                onClick={() => this.deleteTodo(todo)}>
+                onClick={() => this.deleteTodo(index)}>
                   X
+              </button>
+
+              <button
+                type='button'
+                className='edit-btn'
+              >
+                Edit
               </button>
             </li>
           ))}
