@@ -66,8 +66,17 @@ class ClassInput extends Component {
             </li>
           ))}
         </ul>
+        <Count todos={this.state.todos}/>
       </section>
     );
+  }
+}
+
+class Count extends Component {
+  render() {
+    return (
+      <p>Your Task Count: {this.props.todos.length}</p>
+    )
   }
 }
 
